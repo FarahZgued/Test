@@ -22,7 +22,8 @@ jobs:
 
       # Étape 3 : Installer les dépendances avec npm
       - name: Install dependencies
-        run: npm install
+         run: cd mon_site_clean 
+          npm install
 
       # Étape 4 : Installer Firebase CLI
       - name: Install Firebase CLI
