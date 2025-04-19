@@ -1,0 +1,49 @@
+[debug] [2025-04-18T16:21:54.294Z] ----------------------------------------------------------------------
+[debug] [2025-04-18T16:21:54.301Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\farah\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2025-04-18T16:21:54.302Z] CLI Version:   14.2.0
+[debug] [2025-04-18T16:21:54.302Z] Platform:      win32
+[debug] [2025-04-18T16:21:54.303Z] Node Version:  v22.14.0
+[debug] [2025-04-18T16:21:54.303Z] Time:          Fri Apr 18 2025 17:21:54 GMT+0100 (heure normale d’Afrique de l’Ouest)
+[debug] [2025-04-18T16:21:54.304Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-18T16:21:54.930Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-18T16:21:54.932Z] > authorizing via signed-in user (farahzgued12@gmail.com)
+[debug] [2025-04-18T16:21:54.932Z] [iam] checking project projet-pfe-ca585 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-04-18T16:21:54.935Z] Checked if tokens are valid: true, expires at: 1744996677269
+[debug] [2025-04-18T16:21:54.935Z] Checked if tokens are valid: true, expires at: 1744996677269
+[debug] [2025-04-18T16:21:54.937Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/projet-pfe-ca585:testIamPermissions [none]
+[debug] [2025-04-18T16:21:54.938Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/projet-pfe-ca585:testIamPermissions x-goog-quota-user=projects/projet-pfe-ca585
+[debug] [2025-04-18T16:21:54.938Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/projet-pfe-ca585:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-04-18T16:21:56.057Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/projet-pfe-ca585:testIamPermissions 200
+[debug] [2025-04-18T16:21:56.057Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/projet-pfe-ca585:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-04-18T16:21:56.058Z] Checked if tokens are valid: true, expires at: 1744996677269
+[debug] [2025-04-18T16:21:56.058Z] Checked if tokens are valid: true, expires at: 1744996677269
+[debug] [2025-04-18T16:21:56.059Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/projet-pfe-ca585 [none]
+[debug] [2025-04-18T16:21:56.668Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/projet-pfe-ca585 200
+[debug] [2025-04-18T16:21:56.669Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/projet-pfe-ca585 {"projectId":"projet-pfe-ca585","projectNumber":"937368243752","displayName":"projet pfe","name":"projects/projet-pfe-ca585","resources":{"hostingSite":"projet-pfe-ca585","realtimeDatabaseInstance":"projet-pfe-ca585-default-rtdb"},"state":"ACTIVE","etag":"1_d86be420-ce35-4d55-a088-7f6a4317d156"}
+[info] 
+[info] === Deploying to 'projet-pfe-ca585'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2025-04-18T16:21:56.680Z] Checked if tokens are valid: true, expires at: 1744996677269
+[debug] [2025-04-18T16:21:56.680Z] Checked if tokens are valid: true, expires at: 1744996677269
+[debug] [2025-04-18T16:21:56.681Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/projet-pfe-ca585/versions [none]
+[debug] [2025-04-18T16:21:56.681Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/projet-pfe-ca585/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-04-18T16:21:58.035Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/projet-pfe-ca585/versions 200
+[debug] [2025-04-18T16:21:58.035Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/projet-pfe-ca585/versions {"name":"projects/937368243752/sites/projet-pfe-ca585/versions/4b0912f73a21d991","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[projet-pfe-ca585]: beginning deploy... 
+[info] i  hosting[projet-pfe-ca585]: found 137612 files in . 
+[debug] [2025-04-18T16:22:47.058Z] [hosting] uploading with 200 concurrency
+[debug] [2025-04-18T16:22:47.060Z] [hosting] hash cache [] not populated
+[debug] [2025-04-18T16:22:47.203Z] Error: EBUSY: resource busy or locked, open 'C:\Users\farah\ntuser.dat.LOG2'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-04-18T16:22:47.205Z] Error: EBUSY: resource busy or locked, open 'C:\Users\farah\ntuser.dat.LOG1'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-04-18T16:22:47.206Z] Error: EBUSY: resource busy or locked, open 'C:\Users\farah\NTUSER.DAT'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-04-18T16:22:47.284Z] Error: EISDIR: illegal operation on a directory, read
+[error] 
+[error] Error: An unexpected error has occurred.

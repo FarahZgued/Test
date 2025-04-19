@@ -1,0 +1,12 @@
+I0418 13:56:18.730053   25328 load.go:37] Reloading schema and connectors...
+I0418 13:56:18.783695   25328 control.go:71] [/emulator/monsitefirebase 54dd] UpdateResources(): done
+Schema: sources: schema\schema.gql [2088B] 
+Connector "default": sources: connector\mutations.gql [1233B] connector\queries.gql [1802B] 
+I0418 13:56:18.818184   25328 collector.go:107] schema extensions wrote into "C:\\Users\\farah\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [69396B] 
+I0418 13:56:18.818184   25328 load.go:115] Finished reloading
+I0418 13:56:18.819332   25328 dev.go:95] Listening on address (HTTP + gRPC): 127.0.0.1:9399
+I0418 13:56:18.819332   25328 dev.go:95] Listening on address (HTTP + gRPC): [::1]:9399
+I0418 13:56:27.044987   25328 control.go:71] [/emulator/monsitefirebase 3357] UpdateResources(): done
+Schema: sources: schema\schema.gql [2088B] 
+Connector "default": sources: connector\mutations.gql [1233B] connector\queries.gql [1802B] 
