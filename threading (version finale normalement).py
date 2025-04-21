@@ -53,7 +53,7 @@ entry_mdp = tk.Entry(frame_login, show="*")
 entry_mdp.pack(pady=5)
 label_erreur = tk.Label(frame_login, text="", fg="red")
 label_erreur.pack()
-tk.Button(frame_login, text="Se connecter", command=lambda: verifier_login()).pack(pady=15)
+tk.Button(frame_login, text="Se connecter", command=lambda: threading.Thread(target=verifier_login).start()).pack(pady=15)
 tk.Button(frame_login, text="Retour", command=lambda: changer_frame(frame_accueil)).pack()
 
 # --- Pointage ---
@@ -62,8 +62,8 @@ champ_nom = tk.Entry(frame_pointage)
 champ_nom.pack(pady=5)
 frame_boutons = tk.Frame(frame_pointage)
 frame_boutons.pack(pady=10)
-tk.Button(frame_boutons, text="Entrée", bg="lightgreen", width=15, command=lambda: envoyer_pointage("Entrée")).grid(row=0, column=0, padx=10)
-tk.Button(frame_boutons, text="Sortie", bg="lightblue", width=15, command=lambda: envoyer_pointage("Sortie")).grid(row=0, column=1, padx=10)
+tk.Button(frame_boutons, text="Entrée", bg="lightgreen", width=15, command=lambda: threading.Thread(target=envoyer_pointage, args=("Entrée",)).start()).grid(row=0, column=0, padx=10)
+tk.Button(frame_boutons, text="Sortie", bg="lightblue", width=15, command=lambda: threading.Thread(target=envoyer_pointage, args=("Sortie",)).start()).grid(row=0, column=1, padx=10)
 
 # Filtres
 tk.Label(frame_pointage, text="Filtrer par nom :").pack()
@@ -72,7 +72,7 @@ champ_filtre_nom.pack()
 tk.Label(frame_pointage, text="Filtrer par date (YYYY-MM-DD) :").pack()
 champ_filtre_date = tk.Entry(frame_pointage)
 champ_filtre_date.pack()
-tk.Button(frame_pointage, text="Rechercher", command=lambda: lire_donnees(admin_courant)).pack(pady=5)
+tk.Button(frame_pointage, text="Rechercher", command=lambda: threading.Thread(target=lire_donnees, args=(admin_courant,)).start()).pack(pady=5)
 
 # Tableau
 colonnes = ("Nom", "Date et heure", "Type")
@@ -103,43 +103,50 @@ def verifier_login():
         admin_courant = "admin" in email
         champ_nom.delete(0, tk.END)
         champ_nom.insert(0, utilisateur_nom)
-        changer_frame(frame_pointage)
-        lire_donnees(admin_courant)
-        ouvrir_fenetre_webcam()
-    except:
+        fenetre.after(0, lambda: changer_frame(frame_pointage))
+        fenetre.after(0, lambda: threading.Thread(target=lire_donnees, args=(admin_courant,)).start())
+        fenetre.after(0, ouvrir_fenetre_webcam)
+    except Exception as e:
         label_erreur.config(text="Email ou mot de passe incorrect.")
+
 
 def envoyer_pointage(type_pointage):
     nom = champ_nom.get()
     if nom.strip() == "":
         return
-    now = datetime.now()
-    donnees = {
-        "nom": nom.lower(),
-        "date_heure": now.strftime("%Y-%m-%d %H:%M:%S"),
-        "type": type_pointage
-    }
-    db.collection("pointage").add(donnees)
-    lire_donnees(admin_courant)
+    try:
+        now = datetime.now()
+        donnees = {
+            "nom": nom.lower(),
+            "date_heure": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "type": type_pointage
+        }
+        db.collection("pointage").add(donnees)
+        fenetre.after(0, lambda: lire_donnees(admin_courant))
+    except Exception as e:
+        print(f"[❌] Erreur pointage : {e}")
 
 def lire_donnees(admin=False):
-    for item in tree.get_children():
-        tree.delete(item)
-    filtre_nom = champ_filtre_nom.get().lower()
-    filtre_date = champ_filtre_date.get()
-    docs = db.collection("pointage").order_by("date_heure").stream()
-    for doc in docs:
-        data = doc.to_dict()
-        nom = data.get("nom", "").lower()
-        date_heure = data.get("date_heure", "")
-        type_p = data.get("type", "")
-        if not admin and nom != utilisateur_nom:
-            continue
-        if filtre_nom and filtre_nom not in nom:
-            continue
-        if filtre_date and not date_heure.startswith(filtre_date):
-            continue
-        tree.insert("", "end", values=(data["nom"], date_heure, type_p))
+    try:
+        for item in tree.get_children():
+            tree.delete(item)
+        filtre_nom = champ_filtre_nom.get().lower()
+        filtre_date = champ_filtre_date.get()
+        docs = db.collection("pointage").order_by("date_heure").stream()
+        for doc in docs:
+            data = doc.to_dict()
+            nom = data.get("nom", "").lower()
+            date_heure = data.get("date_heure", "")
+            type_p = data.get("type", "")
+            if not admin and nom != utilisateur_nom:
+                continue
+            if filtre_nom and filtre_nom not in nom:
+                continue
+            if filtre_date and not date_heure.startswith(filtre_date):
+                continue
+            tree.insert("", "end", values=(data["nom"], date_heure, type_p))
+    except Exception as e:
+        print(f"[❌] Erreur lecture données : {e}")
 
 def ouvrir_fenetre_webcam():
     global webcam_window, webcam_label
@@ -171,7 +178,7 @@ def afficher_webcam():
         encodings = face_recognition.face_encodings(rgb, boxes)
         names = []
         new_visible = set()
-        maj_effectuee = False  # <-- Nouvelle variable pour éviter les appels inutiles
+        maj_effectuee = False
 
         for encoding in encodings:
             matches = face_recognition.compare_faces(data["encodings"], encoding)
@@ -190,17 +197,16 @@ def afficher_webcam():
                 current_action = get_last_action(name)
                 new_action = "Entrée" if current_action == "Sortie" else "Sortie"
                 last_actions[name] = new_action
+                print(f"✅ Visage reconnu : {name} - Action : {new_action}")
                 db.collection("pointage").add({
                     "nom": name,
                     "date_heure": now.strftime("%Y-%m-%d %H:%M:%S"),
                     "type": new_action
                 })
-                lire_donnees(admin_courant)
-                print(f"[✅] {name} détecté à {now.strftime('%H:%M:%S')} → {new_action}")
-                maj_effectuee = True  # Marque qu’une mise à jour est nécessaire
+                maj_effectuee = True
 
         if maj_effectuee:
-            fenetre.after(0, lire_donnees, admin_courant)  # Actualise automatiquement l’interface
+            fenetre.after(0, lambda: lire_donnees(admin_courant))
 
         currently_visible = new_visible
 
@@ -215,7 +221,6 @@ def afficher_webcam():
         webcam_label.after(10, update)
 
     update()
-
 
 # --- Lancement ---
 changer_frame(frame_accueil)
